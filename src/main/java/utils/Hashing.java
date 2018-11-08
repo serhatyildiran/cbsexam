@@ -7,13 +7,13 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  // TODO: You should add a salt and make this secure
+  // TODO: You should add a salt and make this secure : FIX
   public static String md5(String rawString) {
     try {
 
       // We load the hashing algoritm we wish to use.
       MessageDigest md = MessageDigest.getInstance("MD5");
-      rawString = rawString + "hello";
+      rawString = rawString + "Hello";
 
       // We convert to byte array
       byte[] byteArray = md.digest(rawString.getBytes());

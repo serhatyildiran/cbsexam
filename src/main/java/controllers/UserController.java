@@ -132,4 +132,20 @@ public class UserController {
     // Return user
     return user;
   }
+
+  public static void deleteUser(int id) {
+
+    // Check for DB connection
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+
+    // Making a prepared statement
+    String sql = "DELETE FROM user WHERE id=" + id;
+
+    dbCon.deleteUser(sql);
+
+  }
+
+
 }
