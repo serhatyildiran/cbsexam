@@ -34,23 +34,22 @@ public class OrderController {
     try {
       if (rs.next()) {
 
-        // Perhaps we could optimize things a bit here and get rid of nested queries.
+        /* Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
         Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
-
-        // Create an object instance of order from the database dataa
+        */
+        // Create an object instance of order from the database data
         order =
             new Order(
-                rs.getInt("id"),
-                user,
-                lineItems,
-                billingAddress,
-                shippingAddress,
-                rs.getFloat("order_total"),
-                rs.getLong("created_at"),
-                rs.getLong("updated_at"));
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("billing_address_id"),
+                    rs.getInt("shipping_address_id"),
+                    rs.getFloat("order_total"),
+                    rs.getInt("created_at"),
+                    rs.getInt("updated_at"));
 
         // Returns the build order
         return order;
@@ -84,23 +83,23 @@ public class OrderController {
     try {
       while(rs.next()) {
 
-        // Perhaps we could optimize things a bit here and get rid of nested queries.
+        /* Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
         Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
 
+        */
         // Create an order from the database data
         Order order =
             new Order(
                 rs.getInt("id"),
-                user,
-                lineItems,
-                billingAddress,
-                shippingAddress,
+                rs.getInt("user_id"),
+                rs.getInt("billing_address_id"),
+                rs.getInt("shipping_address_id"),
                 rs.getFloat("order_total"),
-                rs.getLong("created_at"),
-                rs.getLong("updated_at"));
+                rs.getInt("created_at"),
+                rs.getInt("updated_at"));
 
         // Add order to our list
         orders.add(order);

@@ -13,7 +13,7 @@ public class Order {
   private long createdAt;
   private long updatedAt;
 
-  public Order() {}
+  public Order(int id, int user_id, int billing_address_id, int shipping_address_id, float order_total, long created_at, long updated_at) {}
 
   public Order(
       User customer,
