@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.bouncycastle.util.encoders.Hex;
+import sun.security.provider.SecureRandom;
 
 public final class Hashing {
 
@@ -36,6 +37,18 @@ public final class Hashing {
     }
 
     return null;
+  }
+
+  // Adding the salt
+  public static byte[] getSalt(long createdTime, String password) {
+    // Using a secure random number generator
+    SecureRandom random = new SecureRandom();
+    // We like to generate 20 bytes
+    byte[] salt = new byte[20];
+    // Generates a random salt
+    random.engineNextBytes(salt);
+    // Returning the salt
+    return salt;
   }
 
   // TODO: You should add a salt and make this secure

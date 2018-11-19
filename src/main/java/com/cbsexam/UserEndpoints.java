@@ -35,6 +35,8 @@ public class UserEndpoints {
     return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
   }
 
+  public static UserCache userCache = new UserCache();
+
   /** @return Responses */
   @GET
   @Path("/")
@@ -44,7 +46,6 @@ public class UserEndpoints {
     Log.writeLog(this.getClass().getName(), this, "Get all users", 0);
 
     // Get a list of users
-    UserCache userCache = new UserCache();
     ArrayList<User> users = userCache.getUsers(false);
 
 
