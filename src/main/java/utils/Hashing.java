@@ -8,13 +8,14 @@ import sun.security.provider.SecureRandom;
 
 public final class Hashing {
 
+  private String salt = Config.getSalt();
+
   // TODO: You should add a salt and make this secure : FIX
   public static String md5(String rawString) {
     try {
 
       // We load the hashing algoritm we wish to use.
       MessageDigest md = MessageDigest.getInstance("MD5");
-      rawString = rawString + "Hello";
 
       // We convert to byte array
       byte[] byteArray = md.digest(rawString.getBytes());
@@ -39,16 +40,9 @@ public final class Hashing {
     return null;
   }
 
-  // Adding the salt
-  public static byte[] getSalt(long createdTime, String password) {
-    // Using a secure random number generator
-    SecureRandom random = new SecureRandom();
-    // We like to generate 20 bytes
-    byte[] salt = new byte[20];
-    // Generates a random salt
-    random.engineNextBytes(salt);
-    // Returning the salt
-    return salt;
+  public String HashingSalt(String MD5Salt) {
+    String salt = MD5Salt + this.salt;
+    return md5(salt);
   }
 
   // TODO: You should add a salt and make this secure

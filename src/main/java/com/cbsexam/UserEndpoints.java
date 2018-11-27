@@ -94,25 +94,35 @@ public class UserEndpoints {
 
   // TODO: Make the system able to delete users : FIX
   @DELETE
-  @Path("/delete/{user_id}")
+  @Path("/{user_id}/{token}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response deleteUser(@PathParam("user_id")int id) {
+  public Response deleteUser(@PathParam("user_id")int id, @PathParam("token") String token) {
 
-    UserController.deleteUser(id);
+    Boolean delete = UserController.deleteUser(token);
 
-    if (id !=0) {
-      return Response.status(200).entity("User" + id + "is deleted").build();
-    } else {
-
+    if (delete) {
       // Return a response with status 200 and JSON as type
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been deleted").build();
+    } else {
       return Response.status(400).entity("Endpoint not implemented yet").build();
     }
   }
 
   // TODO: Make the system able to update users
-  public Response updateUser(String x) {
+  @PUT
+  @Path("/{user_id}/{token}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response updateUser(@PathParam("token") String token, String body) {
 
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+    User user = new Gson().fromJson(body, User.class);
+
+    Boolean update = UserController.updateUser(user, token);
+
+    if (update) {
+      // Return a response with status 200 and JSON as type
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been deleted").build();
+    } else {
+      return Response.status(400).entity("Endpoint not implemented yet").build();
+    }
   }
 }
