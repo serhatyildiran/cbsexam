@@ -172,8 +172,8 @@ public class UserController {
         sql.printStackTrace();
       }
 
-    } catch (JWTDecodeException ex) {
-      ex.printStackTrace();
+    } catch (JWTDecodeException e) {
+      e.printStackTrace();
     }
 
     return false;
@@ -219,4 +219,74 @@ public class UserController {
 
       return false;
     }
+
+
+  public static String loginUser(User user) {
+
+    Hashing hashing = new Hashing();
+
+    if (dbCon == null)
+      dbCon = new DatabaseController();
+
+    ResultSet resultSet;
+    User newUser;
+    String token = null;
+
+    try {
+      PreparedStatement loginUser = dbCon.getConnection().prepareStatement("SELECT * FROM user WHERE email = ? AND password ?");
+      loginUser.setString(1, user.getEmail());
+      loginUser.setString(2, hashing.HashingSalt(user.getPassword()));
+
+      resultSet = loginUser.executeQuery();
+
+      if(resultSet.next()) {
+        newUser = new User(
+                resultSet.getInt("id"),
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                resultSet.getString("password"),
+                resultSet.getString("email"));
+
+        if (newUser != null) {
+          try {
+            Algorithm algorithm = Algorithm.HMAC256("Hemmelig");
+            token = JWT.create()
+                    .withClaim("userId", newUser.getId())
+                    .withIssuer("auth0")
+                    .sign(algorithm);
+          } catch (JWTCreationException ex) {
+
+          } finally {
+            return token;
+          }
+        }
+      } else {
+        System.out.println("Could not found the user");
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return "";
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

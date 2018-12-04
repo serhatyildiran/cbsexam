@@ -31,8 +31,12 @@ public class UserEndpoints {
     json = Encryption.encryptDecryptXOR(json);
 
     // Return the user with the status code 200
-    // TODO: What should happen if something breaks down?
-    return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    // TODO: What should happen if something breaks down? : FIX
+    if (user != null) {
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    } else {
+      return Response.status(400).entity("Could not get the users").build();
+    }
   }
 
   public static UserCache userCache = new UserCache();
@@ -82,14 +86,22 @@ public class UserEndpoints {
     }
   }
 
-  // TODO: Make the system able to login users and assign them a token to use throughout the system.
+  // TODO: Make the system able to login users and assign them a token to use throughout the system : FIX
   @POST
   @Path("/login")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response loginUser(String x) {
 
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+    User user = new Gson().fromJson(x, User.class);
+
+    String token = UserController.loginUser(user);
+
+    if (token != "") {
+      // Return a response with status 200 and JSON as type
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Your token: " + token).build();
+    } else {
+      return Response.status(400).entity("Endpoint not implemented yet").build();
+    }
   }
 
   // TODO: Make the system able to delete users : FIX
@@ -108,7 +120,7 @@ public class UserEndpoints {
     }
   }
 
-  // TODO: Make the system able to update users
+  // TODO: Make the system able to update users : FIX
   @PUT
   @Path("/{user_id}/{token}")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -120,7 +132,7 @@ public class UserEndpoints {
 
     if (update) {
       // Return a response with status 200 and JSON as type
-      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been deleted").build();
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been updated").build();
     } else {
       return Response.status(400).entity("Endpoint not implemented yet").build();
     }
