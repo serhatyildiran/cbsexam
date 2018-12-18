@@ -98,7 +98,7 @@ public class UserEndpoints {
 
     if (token != "") {
       // Return a response with status 200 and JSON as type
-      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Your token: " + token).build();
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Here is your token: " + token).build();
     } else {
       return Response.status(400).entity("Endpoint not implemented yet").build();
     }

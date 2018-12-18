@@ -209,21 +209,19 @@ public class UserController {
           return true;
         }
 
-        } catch (SQLException sql) {
+      } catch (SQLException sql) {
         sql.printStackTrace();
-        }
-
-      } catch (JWTDecodeException ex) {
-        ex.printStackTrace();
       }
 
-      return false;
+    } catch (JWTDecodeException ex) {
+      ex.printStackTrace();
     }
+
+    return false;
+  }
 
 
   public static String loginUser(User user) {
-
-    Hashing hashing = new Hashing();
 
     if (dbCon == null)
       dbCon = new DatabaseController();
@@ -233,13 +231,13 @@ public class UserController {
     String token = null;
 
     try {
-      PreparedStatement loginUser = dbCon.getConnection().prepareStatement("SELECT * FROM user WHERE email = ? AND password ?");
+      PreparedStatement loginUser = dbCon.getConnection().prepareStatement("SELECT * FROM user WHERE email = ? AND password = ?");
       loginUser.setString(1, user.getEmail());
-      loginUser.setString(2, hashing.HashingSalt(user.getPassword()));
+      loginUser.setString(2, user.getPassword());
 
       resultSet = loginUser.executeQuery();
 
-      if(resultSet.next()) {
+      if (resultSet.next()) {
         newUser = new User(
                 resultSet.getInt("id"),
                 resultSet.getString("first_name"),
@@ -261,7 +259,7 @@ public class UserController {
           }
         }
       } else {
-        System.out.println("Could not found the user");
+        System.out.println("Could not find the user");
       }
 
     } catch (SQLException e) {
@@ -271,19 +269,6 @@ public class UserController {
     return "";
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
