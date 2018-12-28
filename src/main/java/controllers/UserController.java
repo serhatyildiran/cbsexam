@@ -155,7 +155,7 @@ public class UserController {
 
     try {
       DecodedJWT jwt = JWT.decode(token);
-      int id = jwt.getClaim("user_id").asInt();
+      int id = jwt.getClaim("userid").asInt();
 
       try {
         PreparedStatement deleteUser = dbCon.getConnection().prepareStatement("DELETE FROM user WHERE id = ?");
@@ -172,13 +172,11 @@ public class UserController {
         sql.printStackTrace();
       }
 
-    } catch (JWTDecodeException e) {
-      e.printStackTrace();
+    } catch (JWTDecodeException ex) {
+      ex.printStackTrace();
     }
 
     return false;
-
-
   }
 
   // Method to update a user
@@ -190,11 +188,11 @@ public class UserController {
 
     try {
       DecodedJWT jwt = JWT.decode(token);
-      int id = jwt.getClaim("user_id").asInt();
+      int id = jwt.getClaim("userid").asInt();
 
       try {
-        PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET" +
-                "first_name = ?, last_name = ?, password = ?, email = ? WHERE id=? ");
+        PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET " +
+                "first_name = ?, last_name = ?, " + "password = ?, email = ? WHERE id=? ");
 
 
         updateUser.setString(1, user.getFirstname());
@@ -247,7 +245,7 @@ public class UserController {
 
         if (newUser != null) {
           try {
-            Algorithm algorithm = Algorithm.HMAC256("Hemmelig");
+            Algorithm algorithm = Algorithm.HMAC256("Secret");
             token = JWT.create()
                     .withClaim("userId", newUser.getId())
                     .withIssuer("auth0")
